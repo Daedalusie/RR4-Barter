@@ -203,6 +203,8 @@
             <div>
                 <h2>Актуальные цены</h2>
                 <p id="last-update">Обновление: загрузка...</p>
+                <p id="site-stats" style="color: #b5655c; font-size: 13px; margin: -10px 0 15px 0;">Онлайн: — | Уникальных: —</p>
+
             </div>
             <div class="header-info">
                 Все цены берутся из внутриигрового чата, Telegram, Discord-каналов и ВК-групп.<br>
@@ -733,6 +735,33 @@
         drawModalChart();
     });
     modalCanvasEl.addEventListener('mouseleave', () => { hoverIndex = -1; drawModalChart(); });
+
+    const statsWebAppUrl = 'https://script.google.com/macros/s/AKfycbxfoEj_1r5AuB6GqvgKle9mZiGDfVfNwjHppVQWhEeJBDXvN1Nidw6mwclYjfUMZ1Sr/exec';
+
+    function sendOnlinePing() {
+        if (!statsWebAppUrl.startsWith('http')) return;
+        let uid = localStorage.getItem('rr4_uid');
+        if (!uid) {
+            uid = 'u_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+            localStorage.setItem('rr4_uid', uid);
+        }
+
+        fetch(statsWebAppUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ userId: uid })
+        })
+        .then(r => r.json())
+        .then(res => {
+            if (res.online && res.unique) {
+                document.getElementById('site-stats').textContent = `Онлайн: ${res.online} | Уникальных пользователей: ${res.unique}`;
+            }
+        })
+        .catch(() => {});
+    }
+
+    sendOnlinePing();
+    setInterval(sendOnlinePing, 120000);
 
 </script>
          <footer style="text-align: center; color: #b5655c; font-size: 12px; margin-top: 30px; padding-bottom: 10px;">
