@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <link rel="icon" type="image/png" sizes="96x96" href="icon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="icon.png?v=4">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Актуальные цены РР4 — Бартер</title>
@@ -180,6 +180,29 @@
         .tg-wrap:hover .group-popup {
             display: block;
         }
+        .table-wrap { width: 100%; overflow-x: auto; margin-top: 15px; border: 1px solid #3b2d4d; -webkit-overflow-scrolling: touch; }
+        .table-wrap table { margin-top: 0; }
+        td:nth-child(3), td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
+
+        @media (max-width: 1620px) {
+            .page-layout { flex-direction: column; align-items: center; }
+            .center-column { order: 1; }
+            .side-column { order: 2; width: 100%; max-width: 880px; position: static; flex-direction: row; flex-wrap: wrap; }
+            .chart-slot { flex: 1; min-width: 260px; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .top-header { flex-direction: column; gap: 12px; }
+            .header-info { max-width: 100%; width: 100%; }
+            .qr-popup { right: auto; left: 0; }
+            .calc-box { flex-direction: column; align-items: stretch; }
+            .calc-box select, .calc-box input { width: 100%; min-width: 0; font-size: 16px; }
+            .filters { flex-direction: column; align-items: stretch; }
+            .filters input[type="text"], .filters select { width: 100%; min-width: 0; font-size: 16px; }
+            .chart-slot { min-width: 100%; }
+            #modal-canvas { height: 260px; }
+        }
 
     </style>
 </head>
@@ -257,6 +280,7 @@
             </label>
         </div>
 
+         <div class="table-wrap">
         <table>
                     <thead>
             <tr>
@@ -270,9 +294,10 @@
         </thead>
 
             <tbody id="list">
-                <tr><td colspan="5">Загрузка...</td></tr>
+                <tr><td colspan="6">Загрузка...</td></tr>
             </tbody>
         </table>
+        </div>
     </main>
 
     <aside class="side-column">
@@ -773,6 +798,19 @@
 
     sendOnlinePing();
     setInterval(sendOnlinePing, 120000);
+
+    document.querySelectorAll('.tg-wrap').forEach(wrap => {
+        wrap.addEventListener('click', (e) => {
+            if (window.matchMedia('(hover: none)').matches && !wrap.classList.contains('open')) {
+                if (e.target.closest('a')) e.preventDefault();
+                document.querySelectorAll('.tg-wrap').forEach(w => w.classList.remove('open'));
+                wrap.classList.add('open');
+            }
+        });
+    });
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.tg-wrap')) document.querySelectorAll('.tg-wrap').forEach(w => w.classList.remove('open'));
+    });
 
 </script>
          <footer style="text-align: center; color: #b5655c; font-size: 12px; margin-top: 30px; padding-bottom: 10px;">
