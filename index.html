@@ -633,33 +633,30 @@
         allItems = [];
         let latestUpdatedTs = 0;
 
-        for (let i = 1; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) continue;
-            const cols = parseRow(line);
-            const name = cols[0];
-            if (!name) continue;
+      for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+          const [name, groupRaw, , , rawPrice, zmRaw, rawUpdated] = parseRow(line);
+          if (!name) continue;
 
-            const group = cols[1] || '-';
-            const rawPrice = cols[4] || '';
-            const parsedPrice = rawPrice ? parseFloat(rawPrice.replace(',', '.')) : NaN;
-            const priceNum = isNaN(parsedPrice) ? null : parsedPrice;
-            if (group !== '-') categories.add(group);
+          const group = groupRaw || '-';
+          const parsedPrice = rawPrice ? parseFloat(rawPrice.replace(',', '.')) : NaN;
+          const priceNum = isNaN(parsedPrice) ? null : parsedPrice;
+          if (group !== '-') categories.add(group);
 
-            const rawUpdated = cols[6] || '';
-            const updatedTs = rawUpdated ? new Date(rawUpdated).getTime() : 0;
-            if (!isNaN(updatedTs) && updatedTs > latestUpdatedTs) latestUpdatedTs = updatedTs;
+          const updatedTs = rawUpdated ? new Date(rawUpdated).getTime() : 0;
+          if (!isNaN(updatedTs) && updatedTs > latestUpdatedTs) latestUpdatedTs = updatedTs;
 
-            allItems.push({
-                name,
-                group,
-                coffee: rawPrice ? '1 к ' + rawPrice : '-',
-                priceNum,
-                zm: cols[5] || '-',
-                updated: rawUpdated ? formatLocalTime(rawUpdated) : '-',
-                updatedTs: isNaN(updatedTs) ? 0 : updatedTs
-            });
-        }
+          allItems.push({
+              name,
+              group,
+              coffee: rawPrice ? '1 к ' + rawPrice : '-',
+              priceNum,
+              zm: zmRaw || '-',
+              updated: rawUpdated ? formatLocalTime(rawUpdated) : '-',
+              updatedTs: isNaN(updatedTs) ? 0 : updatedTs
+          });
+      }
 
       const lastHistoryTs = historyRows.length > 0 ? new Date(historyRows[historyRows.length - 1].iso).getTime() : 0;
       const finalTs = Math.max(latestUpdatedTs, isNaN(lastHistoryTs) ? 0 : lastHistoryTs);
