@@ -106,7 +106,12 @@
         .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #f59352; }
         .lot-msg { font-size: 13px; margin-top: 8px; color: #f9b658; }
 
-        .user-status { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; margin-left: 10px; font-weight: bold; }
+      .market-indexes { margin-top: 6px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 14px; color: #ece6f0; }
+      .idx-badge { background: #1b1724; border: 1px solid #3b2d4d; padding: 3px 9px; font-size: 12px; }
+      .idx-up { color: #f59352; font-weight: bold; }
+      .idx-down { color: #7bd88f; font-weight: bold; }
+      .idx-flat { color: #f9b658; font-weight: bold; }
+      .user-status { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; margin-left: 10px; font-weight: bold; }
         .user-status.on { color: #7bd88f; }
         .user-status.off { color: #8c7b88; }
 
@@ -231,13 +236,14 @@
             <div>
                 <h2>Актуальные цены</h2>
                 <p id="last-update">Последнее обновление цен: загрузка...</p>
-                <p id="site-stats" style="color: #b5655c; font-size: 13px; margin: -10px 0 15px 0;">Онлайн: — | Уникальных: —</p>
+                <p id="site-stats" style="color: #b5655c; font-size: 13px; margin: -10px 0 10px 0;">Онлайн: — | Уникальных: —</p>
+                <div class="market-indexes" id="market-indexes" style="margin-bottom: 12px;"></div>
             </div>
             <div class="header-info">
                 Все цены берутся из внутриигрового чата, Telegram, Discord-каналов и ВК-групп.<br>
                 Для связи со мной Telegram: 
                 <span class="tg-wrap">
-                    <a href="https://t.me/@AAAAAUAQ" target="_blank" rel="noopener">@AAAAAUAQ</a>
+                    <a href="https://t.me/AAAAAUAQ" target="_blank" rel="noopener">@AAAAAUAQ</a>
                     <span class="qr-popup">
                         <img src="qr.png" alt="QR @AAAAAUAQ">
                         <span>Наведите камеру телефона</span>
@@ -616,6 +622,8 @@
     ])
     .then(([indexText, marketText, historyText]) => {
       let indexUpdateIso = '';
+      let gnIndexVal = null;
+      let marketIndexVal = null;
       if (indexText) {
           indexText.split(/\r?\n/).forEach(line => {
               const [param, baseVal, currVal] = parseRow(line);
@@ -623,10 +631,28 @@
                   const v = parseFloat((currVal || baseVal || '').replace(',', '.'));
                   if (!isNaN(v) && v > 0) rateZM = v;
               }
+              if (param === 'gn_index' && currVal !== undefined && currVal !== '') {
+                  const v = parseFloat(currVal.replace(',', '.'));
+                  if (!isNaN(v)) gnIndexVal = v;
+              }
+              if (param === 'market_index' && currVal !== undefined && currVal !== '') {
+                  const v = parseFloat(currVal.replace(',', '.'));
+                  if (!isNaN(v)) marketIndexVal = v;
+              }
               if (param === 'last_update' && (currVal || baseVal)) {
                   indexUpdateIso = currVal || baseVal;
               }
           });
+      }
+      const formatIndexBadge = (label, val) => {
+          if (val === null) return '';
+          if (val > 0) return `<span class="idx-badge">${label}: <span class="idx-up">▲ +${val}%</span> (дороже базы)</span>`;
+          if (val < 0) return `<span class="idx-badge">${label}: <span class="idx-down">▼ ${val}%</span> (дешевле базы)</span>`;
+          return `<span class="idx-badge">${label}: <span class="idx-flat">● 0%</span> (в норме)</span>`;
+      };
+      const idxContainer = document.getElementById('market-indexes');
+      if (idxContainer) {
+          idxContainer.innerHTML = formatIndexBadge('Индекс рынка', marketIndexVal) + formatIndexBadge('Голд-наживки', gnIndexVal);
       }
         const lines = marketText.split(/\r?\n/);
         const categories = new Set();
