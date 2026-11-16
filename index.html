@@ -473,7 +473,7 @@
             .map(([bucketTs, b]) => ({
               bucketTs,
                 label: formatBucketLabel(bucketTs),
-                coffee: Number((b.sumCoffee / b.count).toFixed(2)),
+                coffee: Math.round(b.sumCoffee / b.count),
                 zm: Number((b.sumZm / b.count).toFixed(4)),
                 postCount: b.count
             }));
@@ -824,7 +824,7 @@
 
         if (lot.marketVal !== null && lot.offerVal !== null && lot.marketVal > 0) {
             const diffPct = Math.round(((lot.offerVal - lot.marketVal) / lot.marketVal) * 100);
-            const fmtVal = n => Number(n.toFixed(1)).toString().replace('.', ',');
+            const fmtVal = n => Number(n.toFixed(0)).toString().replace('.', ',');
             compareHtml += `<div class="lot-compare">Оценка лота: ~${fmtVal(lot.offerVal)} Кофе | По сайту: ~${fmtVal(lot.marketVal)} Кофе</div>`;
             if ((!isBuy && diffPct < 0) || (isBuy && diffPct > 0)) {
                 badgeProfit = `<span class="lot-profit">Выгоднее на ${Math.abs(diffPct)}%</span>`;
