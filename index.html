@@ -157,21 +157,21 @@
     <aside class="side-column">
         <div class="chart-slot" data-slot="Медведка (1шт)">
             <span class="slot-badge">Топ активности #1</span>
-            <div class="slot-title">Медведка (1шт)</div>
+            <div class="slot-title">Медведка )</div>
             <div class="slot-price" id="slot-price-0">—</div>
             <canvas class="slot-preview" id="mini-0" width="306" height="80"></canvas>
             <div class="slot-hint">Открыть график ↗</div>
         </div>
         <div class="chart-slot" data-slot="Раковая шейка (1 шт)">
             <span class="slot-badge">Топ активности #2</span>
-            <div class="slot-title">Раковая шейка (1 шт)</div>
+            <div class="slot-title">Раковая шейка </div>
             <div class="slot-price" id="slot-price-1">—</div>
             <canvas class="slot-preview" id="mini-1" width="306" height="80"></canvas>
             <div class="slot-hint">Открыть график ↗</div>
         </div>
         <div class="chart-slot" data-slot="Мясо дрейсены (1 шт)">
             <span class="slot-badge">Топ активности #3</span>
-            <div class="slot-title">Мясо дрейсены (1 шт)</div>
+            <div class="slot-title">Мясо дрейсены </div>
             <div class="slot-price" id="slot-price-2">—</div>
             <canvas class="slot-preview" id="mini-2" width="306" height="80"></canvas>
             <div class="slot-hint">Открыть график ↗</div>
@@ -225,9 +225,20 @@
                 <label>Описание</label>
                 <textarea id="lot-desc" rows="2" maxlength="140" placeholder="Волхов, пристань, писать в ЛС или ТГ"></textarea>
             </div>
-            <button type="submit" class="btn-add-lot" style="padding: 10px; font-size: 14px;">Отправить на модерацию</button>
-            <div class="lot-msg" id="lot-form-msg"></div>
-        </form>
+          <button type="submit" class="btn-add-lot" style="padding: 10px; font-size: 14px;">Отправить на модерацию</button>
+          <div class="lot-msg" id="lot-form-msg"></div>
+          <div class="lot-rules" style="margin-top: 10px; padding: 10px 12px; background: #141219; border-left: 2px solid #6d455c; font-size: 12px; color: #b5655c; line-height: 1.45;">
+              <b style="color: #f9b658;">Правила размещения:</b>
+              <ul style="margin: 4px 0 0 0; padding-left: 16px;">
+                  <li>Запрещена продажа за реальные деньги (РМТ), спам, реклама и мат.</li>
+                  <li>Лимит: не более <b style="color: #f9b658;">1 лота в час</b> от одного пользователя.</li>
+                  <li><b style="color: #f9b658;">Срок проверки — до 12 часов.</b> Если лот не появился за это время, он был удалён за нарушение правил.</li>
+                  <li>За повторные нарушения — <b style="color: #f9b658;">блокировка по ID устройства</b>.</li>
+                  <li>Одобренный лот активен на сайте <b style="color: #f9b658;">7 дней</b>.</li>
+                  <li><b style="color: #f9b658;">Безопасность сделки:</b> сайт выступает только как витрина. Все обмены проходят в игре напрямую на доверии — проверяйте игрока и делите крупные сделки на мелкие партии.</li>
+              </ul>
+          </div>
+      </form>
     </div>
 </div>
 
@@ -347,9 +358,6 @@
     const marketCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4GJi78tNefWj0MTWi-bSqeRp8_gRBGFrSReNzQMxoWnLeXmKLrelXpE-P130HoM-Qcqu5B2BDcB6w/pub?gid=0&single=true&output=csv';
     const historyCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4GJi78tNefWj0MTWi-bSqeRp8_gRBGFrSReNzQMxoWnLeXmKLrelXpE-P130HoM-Qcqu5B2BDcB6w/pub?gid=870743820&single=true&output=csv';
     const indexCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4GJi78tNefWj0MTWi-bSqeRp8_gRBGFrSReNzQMxoWnLeXmKLrelXpE-P130HoM-Qcqu5B2BDcB6w/pub?gid=1279398996&single=true&output=csv';
-    const lotsCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4GJi78tNefWj0MTWi-bSqeRp8_gRBGFrSReNzQMxoWnLeXmKLrelXpE-P130HoM-Qcqu5B2BDcB6w/pub?gid=1531438309&single=true&output=csv';
-    const onlineCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4GJi78tNefWj0MTWi-bSqeRp8_gRBGFrSReNzQMxoWnLeXmKLrelXpE-P130HoM-Qcqu5B2BDcB6w/pub?gid=2061796872&single=true&output=csv';
-    let onlineUsersMap = new Map();
     let approvedLots = [];
     let historyRows = [];
     let hoverIndex = -1;
