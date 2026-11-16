@@ -685,7 +685,8 @@
       }
 
       const lastHistoryTs = historyRows.length > 0 ? new Date(historyRows[historyRows.length - 1].iso).getTime() : 0;
-      const finalTs = Math.max(latestUpdatedTs, isNaN(lastHistoryTs) ? 0 : lastHistoryTs);
+      const indexTs = indexUpdateIso ? new Date(indexUpdateIso).getTime() : 0;
+      const finalTs = Math.max(latestUpdatedTs, isNaN(lastHistoryTs) ? 0 : lastHistoryTs, isNaN(indexTs) ? 0 : indexTs);
       const finalIso = finalTs > 0 ? new Date(finalTs).toISOString() : indexUpdateIso;
       document.getElementById('last-update').textContent = 'Последнее обновление цен: ' + formatLocalTime(finalIso);
         const catSelect = document.getElementById('category-select');
