@@ -665,9 +665,10 @@
       }
       const formatIndexBadge = (label, val) => {
           if (val === null) return '';
-          if (val > 0) return `<span class="idx-badge">${label}: <span class="idx-up">▲ +${val}%</span> (дороже базы)</span>`;
-          if (val < 0) return `<span class="idx-badge">${label}: <span class="idx-down">▼ ${val}%</span> (дешевле базы)</span>`;
-          return `<span class="idx-badge">${label}: <span class="idx-flat">● 0%</span> (в норме)</span>`;
+          const diff = Number((val - 100).toFixed(1));
+          if (val > 100) return `<span class="idx-badge">${label}: <span class="idx-up">▲ ${val}</span> (+${diff}% к базе)</span>`;
+          if (val < 100) return `<span class="idx-badge">${label}: <span class="idx-down">▼ ${val}</span> (${diff}% к базе)</span>`;
+          return `<span class="idx-badge">${label}: <span class="idx-flat">● 100</span> (норма)</span>`;
       };
       const idxContainer = document.getElementById('market-indexes');
       if (idxContainer) {
